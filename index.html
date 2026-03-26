@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Pro - Academy</title>
+    <style>
+        /* ==================== GIỮ NGUYÊN MÀU SẮC GỐC ==================== */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-color: #f5f7fa;
+            --shadow: 0 4px 20px rgba(0,0,0,0.1);
+            --transition-speed: 0.8s; /* Làm chậm hiệu ứng theo ý bạn */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-color);
+            color: #333;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ==================== HIỆU ỨNG CHUYỂN TRANG MƯỢT MÀ ==================== */
+        .page {
+            transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 1;
+            transform: translateY(0);
+            filter: blur(0);
+            flex: 1;
+            display: block;
+        }
+        .page.hidden {
+            display: none !important;
+            opacity: 0;
+            transform: translateY(20px);
+            filter: blur(10px);
+        }
+
+        /* ==================== HEADER (GIỮ ĐỊNH DẠNG FILE GỐC) ==================== */
+        header {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 1rem 5%;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0; z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { 
+            font-size: 1.5rem; font-weight: bold; 
+            background: var(--primary-gradient); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+            cursor: pointer; 
+        }
+        .nav-info { display: flex; align-items: center; gap: 1rem; }
+        .timer { font-weight: bold; color: #764ba2; font-size: 1.2rem; display: none; }
+
+        /* ==================== TRANG 1: INTRO ==================== */
+        .hero {
+            text-align: center; padding: 8rem 2rem;
+            background: var(--primary-gradient); color: white;
+            border-bottom-left-radius: 50px; border-bottom-right-radius: 50px;
+        }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 1.5rem; }
+        .hero p { font-size: 1.2rem; max-width: 700px; margin: 0 auto 2.5rem; }
+
+        /* ==================== TRANG 2: AUTH (GIỮ STYLE FILE GỐC) ==================== */
+        .auth-container { display: flex; justify-content: center; padding: 4rem 2rem; }
+        .auth-card {
+            background: white; padding: 3rem; border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            max-width: 450px; width: 100%;
+        }
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #555; }
+        input {
+            width: 100%; padding: 12px; border: 2px solid #e0e0e0;
+            border-radius: 12px; transition: 0.3s; outline: none;
+        }
+        input:focus { border-color: #667eea; }
+
+        .btn {
+            padding: 12px 30px; border-radius: 50px; border: none;
+            font-weight: 600; cursor: pointer; transition: 0.3s;
+            display: inline-block; text-decoration: none;
+        }
+        .btn-primary { background: var(--primary-gradient); color: white; width: 100%; }
+        .btn-white { background: white; color: #667eea; }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+
+        /* ==================== TRANG 3: DASHBOARD ==================== */
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
+        .welcome-box {
+            background: var(--primary-gradient); color: white;
+            padding: 2.5rem; border-radius: 20px; margin-bottom: 2rem;
+        }
+        .test-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+        .test-card {
+            background: white; padding: 1.5rem; border-radius: 15px;
+            box-shadow: var(--shadow); border-bottom: 5px solid #667eea;
+            transition: 0.3s;
+        }
+        .test-card:hover { transform: translateY(-5px); }
+
+        /* ==================== TRANG 4: TEST (ENGLISH ONLY) ==================== */
+        .test-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .passage-box {
+            background: white; padding: 2rem; border-radius: 15px;
+            box-shadow: var(--shadow); height: 75vh; overflow-y: auto;
+            line-height: 1.8; text-align: justify;
+        }
+        .question-box {
+            background: white; padding: 2rem; border-radius: 15px;
+            box-shadow: var(--shadow); height: 75vh; overflow-y: auto;
+        }
+        .q-item { background: #f8f9fa; padding: 1.2rem; border-radius: 12px; margin-bottom: 1rem; border-left: 4px solid #667eea; }
+
+        footer { background: #000; color: #aaa; padding: 2rem; text-align: center; margin-top: auto; }
+
+        @media (max-width: 900px) { .test-layout { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo" onclick="showPage('intro')">📚 IELTS Reading Pro</div>
+        <div class="nav-info">
+            <div id="test-timer" class="timer">⏱️ <span id="time-left">60:00</span></div>
+            <div id="user-status"></div>
+            <button class="btn btn-primary" id="main-auth-btn" style="width: auto;" onclick="showPage('login')">Login</button>
+        </div>
+    </header>
+
+    <main id="intro-page" class="page">
+        <section class="hero">
+            <h1>Elevate Your IELTS Score</h1>
+            <p>Experience real IELTS Reading passages with instant feedback, detailed analytics, and professional scoring. Start your journey to Band 8.0+ today.</p>
+            <button class="btn btn-white" onclick="showPage('login')">🚀 Practice For Free</button>
+        </section>
+        <div class="container" style="text-align: center; padding: 4rem 0;">
+            <h2>Why Choose Us?</h2>
+            <div class="test-grid" style="margin-top: 2rem;">
+                <div class="test-card"><h3>Real Materials</h3><p>Passages from actual previous exams.</p></div>
+                <div class="test-card"><h3>Instant Results</h3><p>Get your score as soon as you submit.</p></div>
+                <div class="test-card"><h3>Free Forever</h3><p>No hidden costs or subscriptions.</p></div>
+            </div>
+        </div>
+    </main>
+
+    <main id="login-page" class="page hidden">
+        <div class="auth-container">
+            <div class="auth-card">
+                <h2 style="text-align: center; margin-bottom: 2rem;">Candidate Login</h2>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="login-email" placeholder="name@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="login-password" placeholder="••••••••">
+                </div>
+                <button class="btn btn-primary" onclick="handleLogin()">Sign In</button>
+                <p style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem;">
+                    Demo Account: <b>demo@test.com</b> / <b>123456</b>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <main id="dashboard-page" class="page hidden">
+        <div class="container">
+            <div class="welcome-box">
+                <h1 id="welcome-msg">Welcome, Candidate!</h1>
+                <p>Select a practice test below to begin your session.</p>
+            </div>
+            <h2 style="margin-bottom: 1.5rem;">Available Tests</h2>
+            <div class="test-grid" id="test-list"></div>
+        </div>
+    </main>
+
+    <main id="test-page" class="page hidden">
+        <div class="container" style="max-width: 1400px;">
+            <div class="test-layout">
+                <div class="passage-box" id="passage-content"></div>
+                <div class="question-box">
+                    <div id="questions-container"></div>
+                    <button class="btn btn-primary" style="margin-top: 2rem;" onclick="submitTest()">Finish & Submit</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2025 IELTS Reading Pro - Designed for Excellence</p>
+    </footer>
+
+    <script>
+        // ======= DATA (ENGLISH ONLY) =======
+        const IELTS_DATA = [
+            {
+                id: 1, title: "The Evolution of Language", topic: "Linguistics", time: 60,
+                passage: `<h2>The Evolution of Modern Language</h2><p>Language is a dynamic and ever-evolving system of communication. According to recent linguistic studies, the roots of modern English can be traced back to Germanic tribes...</p><p>Cognitive scientists argue that language acquisition is an innate human ability. Noam Chomsky's theory of Universal Grammar suggests that all humans are born with a biological brain mechanism...</p>`,
+                questions: [
+                    { q: "What is the main focus of the passage?", options: ["History of tribes", "Evolution of language", "Modern biology", "Universal education"], correct: 1 },
+                    { q: "Whose theory mentions Universal Grammar?", options: ["Charles Darwin", "Isaac Newton", "Noam Chomsky", "Albert Einstein"], correct: 2 }
+                ]
+            },
+            {
+                id: 2, title: "Urbanization in the 21st Century", topic: "Society", time: 60,
+                passage: `<h2>Challenges of Global Urbanization</h2><p>As of 2024, more than 50% of the world's population resides in urban areas. This shift from rural to urban living presents both opportunities and significant infrastructure challenges...</p>`,
+                questions: [
+                    { q: "What percentage of people live in cities?", options: ["Less than 50%", "Exactly 40%", "More than 50%", "Exactly 100%"], correct: 2 }
+                ]
+            }
+        ];
+
+        let currentUser = null;
+        let activeTest = null;
+        let timerInterval = null;
+
+        // ======= NAVIGATION LOGIC (SMOOTH & SLOW) =======
+        function showPage(pageId) {
+            const allPages = document.querySelectorAll('.page');
+            
+            // Step 1: Fade out current page
+            allPages.forEach(p => {
+                p.style.opacity = '0';
+                p.style.filter = 'blur(10px)';
+            });
+
+            // Step 2: Switch display after a short delay
+            setTimeout(() => {
+                allPages.forEach(p => p.classList.add('hidden'));
+                const target = document.getElementById(pageId + '-page');
+                target.classList.remove('hidden');
+                
+                // Header UI updates
+                document.getElementById('test-timer').style.display = (pageId === 'test') ? 'block' : 'none';
+                window.scrollTo(0, 0);
+
+                // Step 3: Fade in new page
+                setTimeout(() => {
+                    target.style.opacity = '1';
+                    target.style.filter = 'blur(0)';
+                }, 50);
+            }, 400); 
+        }
+
+        // ======= AUTH =======
+        function handleLogin() {
+            const email = document.getElementById('login-email').value;
+            if(!email) return alert("Please enter your email");
+            
+            currentUser = { name: email.split('@')[0], email: email };
+            document.getElementById('welcome-msg').innerText = `Welcome back, ${currentUser.name}!`;
+            document.getElementById('user-status').innerHTML = `<span style="margin-right:1rem; font-weight:600">👤 ${currentUser.name}</span>`;
+            document.getElementById('main-auth-btn').innerText = "Logout";
+            document.getElementById('main-auth-btn').onclick = () => location.reload();
+            
+            renderDashboard();
+            showPage('dashboard');
+        }
+
+        // ======= DASHBOARD =======
+        function renderDashboard() {
+            const list = document.getElementById('test-list');
+            list.innerHTML = IELTS_DATA.map(t => `
+                <div class="test-card">
+                    <small style="color:#667eea; font-weight:bold">${t.topic}</small>
+                    <h3 style="margin: 10px 0">${t.title}</h3>
+                    <p style="font-size:0.9rem; color:#666; margin-bottom:1.5rem">Time: ${t.time} mins | 10 Questions</p>
+                    <button class="btn btn-primary" onclick="startTest(${t.id})">Start Reading</button>
+                </div>
+            `).join('');
+        }
+
+        // ======= TESTING =======
+        function startTest(id) {
+            activeTest = IELTS_DATA.find(t => t.id === id);
+            document.getElementById('passage-content').innerHTML = activeTest.passage;
+            
+            const qContainer = document.getElementById('questions-container');
+            qContainer.innerHTML = activeTest.questions.map((q, i) => `
+                <div class="q-item">
+                    <p><strong>Question ${i+1}:</strong> ${q.q}</p>
+                    ${q.options.map((opt, oi) => `
+                        <label style="display:block; margin:8px 0; cursor:pointer">
+                            <input type="radio" name="q${i}" value="${oi}"> ${opt}
+                        </label>
+                    `).join('')}
+                </div>
+            `).join('');
+
+            showPage('test');
+            startTimer(activeTest.time * 60);
+        }
+
+        function startTimer(seconds) {
+            clearInterval(timerInterval);
+            let time = seconds;
+            timerInterval = setInterval(() => {
+                time--;
+                let m = Math.floor(time / 60);
+                let s = time % 60;
+                document.getElementById('time-left').innerText = `${m}:${s < 10 ? '0'+s : s}`;
+                if(time <= 0) submitTest();
+            }, 1000);
+        }
+
+        function submitTest() {
+            clearInterval(timerInterval);
+            let score = 0;
+            activeTest.questions.forEach((q, i) => {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if(selected && parseInt(selected.value) === q.correct) score++;
+            });
+
+            alert(`Test Results:\nCorrect: ${score}/${activeTest.questions.length}\nBand Score: ${score === 2 ? '9.0' : '5.0'}`);
+            showPage('dashboard');
+        }
+
+        // Initial Page
+        window.onload = () => showPage('intro');
+    </script>
+</body>
+</html>
